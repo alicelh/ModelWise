@@ -104,7 +104,6 @@ export default defineComponent({
          * @return {*}
          */
     const datacount = computed(() => {
-      console.log(props.selecteddata)
       if (props.selecteddata.length === 0) {
         return caldataamount(props.predictions)
       } else {

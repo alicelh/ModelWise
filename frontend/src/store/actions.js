@@ -1,10 +1,13 @@
 import { getNewData, calProjectionResults, getSubsetData, getSelectedModelInfos, getencodingfeature, getShapProj, getDatasetList } from '../api'
 
+export const initdatasetlist = async ({commit})=>{
+  const response = await getDatasetList()
+  commit('setDatasetList',await response.data) 
+}
+
 // call when change dataset in the systen interface
 // return all data needed for the system rendering
 export const changeDataset = async ({ commit, state }, name) => {
-  const response0 = await getDatasetList()
-  commit('setDatasetList',await response0.data)
   commit('updateSubsetFeatureInfo', [])
   commit('changeDataset', name)
   commit('changeDistributionloading', true)
@@ -59,7 +62,6 @@ export const getShapProjectionResult = async ({ commit, state }, modelname) => {
 export const getSubsetInfo = async ({ commit, state, getters }) => {
   const response = await getSubsetData(state.dataset, state.selectedmodels, getters.selecteddataid)
   commit('updateSubsetFeatureInfo', await response[0].data)
-  console.log('hi', response[1].data)
   commit('updateSubsetShap', await response[1].data)
   commit('updateSubsetStatistics', await response[2].data)
 }

@@ -45,7 +45,6 @@ export const changeShapviewloading = (state, loadingstatus) => {
 }
 
 export const updateSelectedData = (state, selecteddata) => {
-  console.log(state.selectionmode)
   if (state.selectionmode === 'new') {
     state.selecteddata = selecteddata
   } else if (state.selectionmode === 'union') {

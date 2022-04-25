@@ -137,7 +137,6 @@ export default {
     }
 
     const RenderView = (dimensions) => {
-      console.log('renderview')
       const { width, height } = dimensions
       const svg = select(svgRef.value)
       const canvas = select(canvasRef.value)
@@ -151,7 +150,6 @@ export default {
       drawSVG(svg, width, height)
       renderPoints(props.data, encodingfeature.value, width, height)
       renderselecteddata(store.state.selecteddata)
-      // ctx.globalAlpha = 1;
     }
 
     onMounted(() => {

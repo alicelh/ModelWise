@@ -90,7 +90,6 @@ export default {
         }
       })
       newx.sort((a, b) => a.x - b.x)
-      console.log(newx.map(n => n.name))
       store.commit('updatesortedmodelnames', newx.map(n => n.name))
     }
 
@@ -314,8 +313,6 @@ export default {
          * @return {*}
          */
     const renderSelectedLinks = (links) => {
-      console.log(links)
-      const selectedlinkname = links.map(d => d.sourcename + d.targetname)
       if (links.length === 0 && selectedNodeSet.value.size === 0) {
         d3.select('#links')
           .selectAll('.link')
@@ -378,7 +375,6 @@ export default {
     // }
 
     const renderSelectedSankey = (selecteddata) => {
-      console.log(props.sortedmodelnames)
       if (props.sankey) {
         const start = new Date().getTime()
         const { nodes, links } = props.sankey.getSelectedNodes(selecteddata, props.sankeyGraph.nodeMap, props.predictions, props.compresschecked, props.sortedmodelnames)
@@ -398,7 +394,6 @@ export default {
     // re-render when size changes
     watch(() => props.sankeyGraph, (sankeyGraph) => {
       renderview(sankeyGraph)
-      console.log('here')
       renderSelectedSankey(store.state.selecteddata)
     })
 
