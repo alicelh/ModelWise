@@ -3,6 +3,8 @@
 Codes for the visual analytics method *ModelWise* which is described in our paper "ModelWise: Interactive Model Comparison for Model
 Diagnosis, Improvement and Selection". (accepted to EuroVis 2022)
 
+online demo: http://modelwise.herokuapp.com/
+
 ## Introduction
 
 |![Interface screenshot of ModelWise](modelwisescreenshot.png)|
