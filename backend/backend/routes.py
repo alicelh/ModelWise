@@ -4,7 +4,7 @@ from flask import jsonify,request
 import numpy as np
 import pandas as pd
 import simplejson as json
-# from sklearn.manifold import TSNE
+from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler,OneHotEncoder
 import nptsne
 import time
@@ -168,12 +168,11 @@ def tsne_function(df,num_features,cat_features,classfeature,method):
     # df2 = df
     rowcount = df2.shape[0]
     if(rowcount<400):
-        tsne= nptsne.TextureTsne(False,1500,2,15,300)
-        # tsne=TSNE(perplexity=20,learning_rate=100,n_iter=400)
-        #tsne = nptsne.TextureTsne(False,2000,2,20,400)
+        # nptsne has some unclear issue for small dataset
+        # tsne= nptsne.TextureTsne(False,1500,2,15,300) 
+        tsne=TSNE(perplexity=20,learning_rate=100,n_iter=400)
     else:
         tsne = nptsne.TextureTsne(False,3000,2,30,800)
-    # tsne = nptsne.TextureTsne(False,5000,2,50,500)
 
     X_embedded = tsne.fit_transform(df2)
     
@@ -243,8 +242,7 @@ def get_shapproj(dataset,modelname):
                 if(type(e)!=np.float64):
                     print(e,type(e))
         if(rowcount<400):
-            tsne= nptsne.TextureTsne(False,1500,2,15,300)
-            # tsne= TSNE(n_components=2,perplexity=15,learning_rate=300)
+            tsne= TSNE(n_components=2,perplexity=15,learning_rate=300)
             #tsne = nptsne.TextureTsne(False,1800,2,18,600)
         else:
             tsne = nptsne.TextureTsne(False,3000,2,30,800)
