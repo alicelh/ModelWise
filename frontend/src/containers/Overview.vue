@@ -141,6 +141,8 @@ export default defineComponent({
     const selectionmode = ref<string>('new');
     const store = useStore();
 
+    const dataset = store.state.dataset;
+
     const handleChangeDataset = (value:string)=>{
       let currentdataset = store.state.dataset;
       if(value!== currentdataset){
@@ -171,7 +173,7 @@ export default defineComponent({
 
     return {
         datasetlist: computed(()=>store.state.datasetlist),
-        dataset:computed(()=>store.state.dataset),
+        dataset,
         models:computed(()=>store.state.models),
         datainfo:computed(()=>store.state.datainfo),
         modelmetrics:computed(()=>store.state.modelinfos),

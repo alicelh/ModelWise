@@ -1,10 +1,13 @@
 import { getNewData, calProjectionResults, getSubsetData, getSelectedModelInfos, getencodingfeature, getShapProj, getDatasetList } from '../api'
 
+export const setDatasetList = async ({commit}) => {
+  const response = await getDatasetList()
+  commit('setDatasetList',await response.data)
+}
+
 // call when change dataset in the systen interface
 // return all data needed for the system rendering
 export const changeDataset = async ({ commit, state }, name) => {
-  const response0 = await getDatasetList()
-  commit('setDatasetList',await response0.data)
   commit('updateSubsetFeatureInfo', [])
   commit('changeDataset', name)
   commit('changeDistributionloading', true)
@@ -12,6 +15,7 @@ export const changeDataset = async ({ commit, state }, name) => {
   commit('changeShapviewloading', true)
   commit('changeProjectionloading1', true)
   commit('changeProjectionloading2', true)
+  console.log(name)
   const response = await getNewData(name)
   commit('updateSelectedData', [])
   commit('updateFeatureInfo', await response[0].data)
@@ -27,7 +31,7 @@ export const changeDataset = async ({ commit, state }, name) => {
   const response2 = await getShapProj(state.dataset, response[1].data.modelnames[0])
   commit('updateShapProjection', await response2.data)
   commit('changeProjectionloading1', false)
-  const response3 = await calProjectionResults(name, 'all', state.projectionmethod)
+  const response3 = await calProjectionResults(name, state.projectionmethod)
   commit('updateProjection', await response3.data)
   commit('changeProjectionloading2', false)
 }
@@ -43,7 +47,7 @@ export const changeModels = async ({ commit, state }, models) => {
 
 export const getProjectionResult = async ({ commit, state }, projectionmethod) => {
   commit('changeProjectionloading2', true)
-  const response = await calProjectionResults(state.dataset, state.selectedfeatures, projectionmethod)
+  const response = await calProjectionResults(state.dataset, projectionmethod)
   commit('updateProjection', await response.data)
   commit('changeProjectionloading2', false)
 }

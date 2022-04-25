@@ -6,7 +6,7 @@ const API = axios.create({
 
 export const getDatasetList = () => API.get('/datasetlist')
 
-export const getFeatureDistribution = (dataset) => API.get(`/${dataset}/featureinfo`)
+export const getFeatureDistribution = (dataset) => API.get(`/${dataset}/featureinfos`)
 
 export const getSubsetFeatureDistribution = (dataset, subset) => API.post(`/${dataset}/featureinfo/subset`, { subset })
 
@@ -22,7 +22,7 @@ export const getNewData = (dataset) => {
   return axios.all([getFeatureDistribution(dataset), getModelInfos(dataset)])
 }
 
-export const calProjectionResults = (dataset, features, projectionmethod) => API.post(`/${dataset}/calFeatureProjection/${projectionmethod}`, { features })
+export const calProjectionResults = (dataset, projectionmethod) => API.get(`/${dataset}/calFeatureProjection/${projectionmethod}`)
 
 export const getModelInfos = (dataset) => API.get(`/${dataset}/modelinfos`)
 

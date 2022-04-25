@@ -11,6 +11,7 @@ export default {
     Interface
   },
   mounted () {
+    this.$store.dispatch('setDatasetList')
     this.$store.dispatch('changeDataset', this.$store.state.dataset)
     /**
      * @description: fetch feature distribution and shap info of subset once selecteddata in vuex change

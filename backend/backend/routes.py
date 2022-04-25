@@ -105,7 +105,7 @@ def statisticdistribution(types,df,df2):
     return statistics
 
 
-@app.route("/api/<dataset>/featureinfo")
+@app.route("/api/<dataset>/featureinfos",methods=['GET'])
 def get_featureinfo(dataset):
     start_time = time.time()
     types = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\featuretypes.csv')
@@ -149,114 +149,123 @@ def get_featureinfo_subset(dataset):
     return jsonify(statisticdistribution(types,df_subset,df))
 
     
-def tsne_function(df,num_features,cat_features,classfeature,method):
-    cat_df=pd.DataFrame()
-    if(len(cat_features)>0):
-        encoder = OneHotEncoder()
-        encoderresult = encoder.fit_transform(df[cat_features].to_numpy()).toarray()
-        cat_df = pd.DataFrame(encoderresult)
-    if(method=='tsne_categorical'):
-        df2=cat_df.values
-    num_df= pd.DataFrame(StandardScaler().fit_transform(df[num_features]))
-    if(method=='tsne_num'):
-        df2 = num_df.values
-    df_all = pd.concat([cat_df,num_df],axis=1)
-    if(method=='tsne_all'):
-        df2 = df_all.values
+# def tsne_function(df,num_features,cat_features,classfeature,method):
+#     cat_df=pd.DataFrame()
+#     if(len(cat_features)>0):
+#         encoder = OneHotEncoder()
+#         encoderresult = encoder.fit_transform(df[cat_features].to_numpy()).toarray()
+#         cat_df = pd.DataFrame(encoderresult)
+#     if(method=='tsne_categorical'):
+#         df2=cat_df.values
+#     num_df= pd.DataFrame(StandardScaler().fit_transform(df[num_features]))
+#     if(method=='tsne_num'):
+#         df2 = num_df.values
+#     df_all = pd.concat([cat_df,num_df],axis=1)
+#     if(method=='tsne_all'):
+#         df2 = df_all.values
 
-    # randomly sample data to run quickly
-    # df2 = df
-    rowcount = df2.shape[0]
-    if(rowcount<400):
-        # nptsne has some unclear issue for small dataset
-        # tsne= nptsne.TextureTsne(False,1500,2,15,300) 
-        tsne=TSNE(perplexity=20,learning_rate=100,n_iter=400)
-    else:
-        tsne = nptsne.TextureTsne(False,3000,2,30,800)
+#     # randomly sample data to run quickly
+#     # df2 = df
+#     rowcount = df2.shape[0]
+#     if(rowcount<400):
+#         # nptsne has some unclear issue for small dataset
+#         # tsne= nptsne.TextureTsne(False,1500,2,15,300) 
+#         tsne=TSNE(perplexity=20,learning_rate=100,n_iter=400)
+#     else:
+#         tsne = nptsne.TextureTsne(False,3000,2,30,800)
 
-    X_embedded = tsne.fit_transform(df2)
+#     X_embedded = tsne.fit_transform(df2)
     
-    xyembed = X_embedded.reshape((rowcount, 2))
+#     xyembed = X_embedded.reshape((rowcount, 2))
 
-    classarr = df[classfeature].values
+#     classarr = df[classfeature].values
 
-    result = []
+#     result = []
 
-    for i in range(len(classarr)):
-        # dataframe type is int64 which is cannot be join serilized
-        result.append({'id':i,"class":int(classarr[i]),"pos":xyembed[i].tolist()})
+#     for i in range(len(classarr)):
+#         # dataframe type is int64 which is cannot be join serilized
+#         result.append({'id':i,"class":int(classarr[i]),"pos":xyembed[i].tolist()})
     
-    return result
+#     return result
 
-@app.route("/api/<dataset>/calFeatureProjection/<method>",methods=['POST'])
+@app.route("/api/<dataset>/calFeatureProjection/<method>",methods=['GET'])
 def calprojection(dataset,method):
-    request_json = request.get_json()
-    features = request_json.get('features')
+    # request_json = request.get_json()
+    # features = request_json.get('features')
 
-    types = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\featuretypes.csv')
-    classfeature = types.loc[types['type']=='class']['featurename'].iloc[0] # find out which feature is used for classification
+    # types = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\featuretypes.csv')
+    # classfeature = types.loc[types['type']=='class']['featurename'].iloc[0] # find out which feature is used for classification
 
-    df = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\features.csv',nrows=rows)
+    # df = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\features.csv',nrows=rows)
 
-    if features=='all':
-        features = types.loc[(types['type']!='class') & (types['type']!='key')]['featurename'].tolist()
+    # if features=='all':
+    #     features = types.loc[(types['type']!='class') & (types['type']!='key')]['featurename'].tolist()
 
-    start_time = time.time()
+    # start_time = time.time()
 
     showtype = "projection"
 
-    num_features = types.loc[((types['type']=='int') | (types['type']=='float')) & (types['featurename'].isin(features))]['featurename'].tolist()
-    cat_features = types.loc[((types['type']=='binary') | (types['type']=='categorical')) & (types['featurename'].isin(features))]['featurename'].tolist()
-    result = tsne_function(df,num_features,cat_features,classfeature,method)
+    # num_features = types.loc[((types['type']=='int') | (types['type']=='float')) & (types['featurename'].isin(features))]['featurename'].tolist()
+    # cat_features = types.loc[((types['type']=='binary') | (types['type']=='categorical')) & (types['featurename'].isin(features))]['featurename'].tolist()
+    # result = tsne_function(df,num_features,cat_features,classfeature,method)
 
-    print("--- %s seconds ---" % (time.time() - start_time))
+    # print("--- %s seconds ---" % (time.time() - start_time))
 
-    frequency = df[classfeature].value_counts().sort_values(ascending=False).index.tolist()
+    # frequency = df[classfeature].value_counts().sort_values(ascending=False).index.tolist()
 
-    result = sorted(result, key=lambda x: frequency.index(x['class']))
+    # result = sorted(result, key=lambda x: frequency.index(x['class']))
+    mypath = os.getcwd()+'\\db\\'+dataset+'\\featureproj\\'+method+'.json'
+    if os.path.exists(mypath):
+        with open(mypath, "r") as outfile:
+            result = json.load(outfile)
+    else:
+        result= []
 
     return jsonify({'type':showtype,'data':result})
 
 @app.route("/api/<dataset>/shapproj/<modelname>")
 def get_shapproj(dataset,modelname):
-    types = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\featuretypes.csv')
-    classfeature = types.loc[types['type']=='class']['featurename'].iloc[0] # find out which feature is used for classification
+    # types = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\featuretypes.csv')
+    # classfeature = types.loc[types['type']=='class']['featurename'].iloc[0] # find out which feature is used for classification
 
-    classdf = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\features.csv',nrows=rows)[classfeature]
-    with open(os.getcwd()+'\\db\\'+dataset+'\\models.json') as f:
-        models = json.load(f)
-        if modelname=='all':
-            shapdatalist=[]
-            scaler = StandardScaler()
-            for model in models:
-                shapdatalist.append(np.concatenate(tuple([model['shap'][classname] for classname in model['classes']]),axis=1))
-            shapdata = np.concatenate(shapdatalist,axis=1)
-            scaler.fit(shapdata)
-            shapdata = scaler.transform(shapdata)
-        else:
-            model = [model for model in models if model['model'] == modelname][0]
-            shapdata = np.concatenate(tuple([model['shap'][classname] for classname in model['classes']]),axis=1)
-        rowcount = len(shapdata)
-        for row in shapdata:
-            for e in row:
-                if(type(e)!=np.float64):
-                    print(e,type(e))
-        if(rowcount<400):
-            tsne= TSNE(n_components=2,perplexity=15,learning_rate=300)
-            #tsne = nptsne.TextureTsne(False,1800,2,18,600)
-        else:
-            tsne = nptsne.TextureTsne(False,3000,2,30,800)
-        X_embedded = tsne.fit_transform(shapdata)
-        xyembed = X_embedded.reshape((rowcount, 2))
+    # classdf = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\features.csv',nrows=rows)[classfeature]
+    # with open(os.getcwd()+'\\db\\'+dataset+'\\models.json') as f:
+    #     models = json.load(f)
+    #     if modelname=='all':
+    #         shapdatalist=[]
+    #         scaler = StandardScaler()
+    #         for model in models:
+    #             shapdatalist.append(np.concatenate(tuple([model['shap'][classname] for classname in model['classes']]),axis=1))
+    #         shapdata = np.concatenate(shapdatalist,axis=1)
+    #         scaler.fit(shapdata)
+    #         shapdata = scaler.transform(shapdata)
+    #     else:
+    #         model = [model for model in models if model['model'] == modelname][0]
+    #         shapdata = np.concatenate(tuple([model['shap'][classname] for classname in model['classes']]),axis=1)
+    #     rowcount = len(shapdata)
+    #     for row in shapdata:
+    #         for e in row:
+    #             if(type(e)!=np.float64):
+    #                 print(e,type(e))
+    #     if(rowcount<400):
+    #         tsne= TSNE(n_components=2,perplexity=15,learning_rate=300)
+    #         #tsne = nptsne.TextureTsne(False,1800,2,18,600)
+    #     else:
+    #         tsne = nptsne.TextureTsne(False,3000,2,30,800)
+    #     X_embedded = tsne.fit_transform(shapdata)
+    #     xyembed = X_embedded.reshape((rowcount, 2))
 
-        result = []
-        classarr = classdf.values
-        for i in range(len(classarr)):
-            # dataframe type is int64 which is cannot be join serilized
-            result.append({'id':i,"class":int(classarr[i]),"pos":xyembed[i].tolist()})
+    #     result = []
+    #     classarr = classdf.values
+    #     for i in range(len(classarr)):
+    #         # dataframe type is int64 which is cannot be join serilized
+    #         result.append({'id':i,"class":int(classarr[i]),"pos":xyembed[i].tolist()})
     
-    frequency = classdf.value_counts().sort_values(ascending=False).index.tolist() 
-    result = sorted(result, key=lambda x: frequency.index(x['class']))
+    # frequency = classdf.value_counts().sort_values(ascending=False).index.tolist() 
+    # result = sorted(result, key=lambda x: frequency.index(x['class']))
+
+    with open(os.getcwd()+'\\db\\'+dataset+'\\shapproj\\'+modelname+'.json', "r") as outfile:
+        result = json.load(outfile)
 
     return jsonify(result)
 

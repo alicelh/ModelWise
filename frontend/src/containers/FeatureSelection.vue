@@ -16,6 +16,7 @@
         style="width: 100%; height:45px"
         size="small"
         placeholder="Please select"
+        disabled
       >
         <a-select-option v-for="name in featurenames" :key="name">
           {{ name }}
