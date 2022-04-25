@@ -1,0 +1,12 @@
+featurename,type
+index,key
+Pregnancies,int
+Glucose,int
+BloodPressure,int
+SkinThickness,int
+Insulin,float
+BMI,float
+DiabetesPedigreeFunction,float
+Age,int
+Outcome,class
+

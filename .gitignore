@@ -1,0 +1,13 @@
+__pycache__/
+
+*.pyo
+*.pyc
+
+*.log
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+*.log

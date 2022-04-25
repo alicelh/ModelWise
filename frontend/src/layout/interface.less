@@ -1,0 +1,133 @@
+@marginw: 2px;
+
+.main{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 100%;
+}
+
+.col{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.firstcol{
+    width:250px;
+    margin-right: @marginw;
+}
+
+.secondcol{
+    width: 420px;
+    display: flex;
+    flex-direction: column;
+    margin-right: @marginw;
+    min-width: 300px;
+}
+
+.thirdcol{
+    flex: 1;
+    min-width: 500px;
+}
+
+.panel{
+    border: 1px solid rgb(119, 119, 119);
+    display: flex;
+    flex-direction: column;
+}
+
+.panelblock1,.panelblock2{
+    display: flex;
+    flex-direction: column;
+} 
+
+.panelblock2{
+    // height: 400px;
+    flex:2 1 auto
+}
+
+.overviewpanel{
+    margin-bottom: @marginw;
+}
+
+.subsetspanel{
+    flex: 1;
+}
+
+.featureviewpanel{
+    height: 540px;
+    margin-bottom: @marginw;
+}
+
+.featureselpanel{
+    height: auto;
+    flex: 2;
+}
+
+.featuretablepanel{
+    flex: 2 1 auto;
+    height: auto;
+}
+
+.modelresultspanel{
+    height: 540px;
+    margin-bottom: @marginw;
+}
+
+.featureinterprepanel{
+    height: auto;
+    flex: 2;
+}
+
+.headline{
+    width: 100%;
+    background-color: #6c757d;
+    color:white;
+    text-align: center;
+    font-size: 15px;
+    height: 23px;
+}
+
+.panelcontent{
+    height: 100%;
+}
+
+.distributionview{
+    display: flex;
+}
+
+.predictionview{
+    height: 516px;
+}
+
+.projectionview{
+    height: 390px;
+}
+
+/*
+ *  scrollbar style
+ */
+
+ ::-webkit-scrollbar-track
+ {
+    //  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+     border-radius: 10px;
+    //  background-color: #F5F5F5;
+ }
+ 
+::-webkit-scrollbar
+ {
+     width: 4px;
+    //  background-color: #F5F5F5;
+ }
+ 
+::-webkit-scrollbar-thumb
+ {
+     border-radius: 99px;
+     background-color: rgba(0,0,0,.5);
+ }
+
+ .rc-virtual-list-scrollbar{
+     width: 4px !important;
+ }
