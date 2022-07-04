@@ -3,7 +3,7 @@
 Codes for the visual analytics method *ModelWise* which is described in our paper "ModelWise: Interactive Model Comparison for Model
 Diagnosis, Improvement and Selection". 
 
-online demo (some functions are limited): https://modelwise.herokuapp.com/ 
+online demo (real-time projection is not supported): https://modelwise.herokuapp.com/ 
 
 ## Introduction
 
