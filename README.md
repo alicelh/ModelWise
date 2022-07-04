@@ -1,9 +1,9 @@
 # ModelWise
 
 Codes for the visual analytics method *ModelWise* which is described in our paper "ModelWise: Interactive Model Comparison for Model
-Diagnosis, Improvement and Selection". (accepted to EuroVis 2022)
+Diagnosis, Improvement and Selection". 
 
-online demo: https://modelwise.herokuapp.com/
+online demo (some functions are limited): https://modelwise.herokuapp.com/ 
 
 ## Introduction
 
@@ -45,6 +45,20 @@ First, you need to create a new folder under the path `./backend/db`. Then you n
 * *predictions.csv*: prediction values of all models.
 
 Please refer to the jupyter notebook in the preprocessing folder as an example about how to generate these files. 
+
+## Citation
+If you use this code for your research, please consider citing:
+```
+@article {10.1111:cgf.14525,
+journal = {Computer Graphics Forum},
+title = {{ModelWise: Interactive Model Comparison for Model Diagnosis, Improvement and Selection}},
+author = {Meng, Linhao and Elzen, Stef van den and Vilanova, Anna},
+year = {2022},
+publisher = {The Eurographics Association and John Wiley & Sons Ltd.},
+ISSN = {1467-8659},
+DOI = {10.1111/cgf.14525}
+}
+```
 
 ## License
 ModelWise is published under the BSD 3-Clause License, as found in the LICENSE file.
