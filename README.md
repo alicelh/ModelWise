@@ -3,7 +3,7 @@
 Codes for the visual analytics method *ModelWise* which is described in our paper "ModelWise: Interactive Model Comparison for Model
 Diagnosis, Improvement and Selection". 
 
-online demo (real-time projection is not supported): https://modelwise.onrender.com/ 
+online demo (real-time projection is not supported): https://modelwise.onrender.com/ （Due to service limits, it usually has about 1 min delay for the first request 👾）
 
 ## Introduction
 
