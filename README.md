@@ -1,7 +1,7 @@
 # ModelWise
 
 Codes for the visual analytics method *ModelWise* which is described in our paper "[ModelWise: Interactive Model Comparison for Model
-Diagnosis, Improvement and Selection](https://doi.org/10.1111/cgf.14525)". 
+Diagnosis, Improvement and Selection](https://doi.org/10.1111/cgf.14525)". Please watch our [video](https://vimeo.com/696132887?share=copy) for the introduction. 
 
 online demo (real-time projection is not supported): https://modelwise.onrender.com/ （Due to service limits, it usually has about 1 min delay for the first request 👾）
 
