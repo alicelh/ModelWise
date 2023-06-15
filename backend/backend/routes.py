@@ -19,15 +19,19 @@ def home():
 
 @app.route("/api/datasetlist")
 def get_datasetlist():
-    path = os.getcwd()+'\\db\\'
+    path = os.path.join(os.getcwd(),'db')
     dir_list = os.listdir(path)
-    return jsonify(dir_list)
+    response = jsonify(dir_list)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 @app.route("/api/<dataset>/featurevalue/<featurename>")
 def get_featurevalue(dataset,featurename):
-    types = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\featuretypes.csv')
-    df = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\features.csv',nrows=rows)
+    featuretypepath = os.path.join(os.getcwd(),'db',dataset,'featuretypes.csv')
+    types = pd.read_csv(featuretypepath)
+    featurepath = os.path.join(os.getcwd(),'db',dataset,'features.csv')
+    df = pd.read_csv(featurepath,nrows=rows)
     featuretype = (types.loc[types['featurename']==featurename].iloc[0])['type']
     if featuretype=='class':
         featuretype = 'class'
@@ -108,13 +112,15 @@ def statisticdistribution(types,df,df2):
 @app.route("/api/<dataset>/featureinfo")
 def get_featureinfo(dataset):
     start_time = time.time()
-    types = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\featuretypes.csv')
+    featuretypepath = os.path.join(os.getcwd(),'db',dataset,'featuretypes.csv')
+    types = pd.read_csv(featuretypepath)
     classfeature = types.loc[types['type']=='class']['featurename'].iloc[0] # find out which feature is used for classification
 
 
     print("--- %s seconds ---" % (time.time() - start_time))
     start_time = time.time()
-    df = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\features.csv',nrows=rows)
+    featurepath = os.path.join(os.getcwd(),'db',dataset,'features.csv')
+    df = pd.read_csv(featurepath,nrows=rows)
     
     # df = pd.read_sql_query("select * from "+str(dataset)+"_features",conn) # too slow than read csv
     print("--- %s seconds ---" % (time.time() - start_time))
@@ -137,11 +143,13 @@ def get_featureinfo_subset(dataset):
     subset = request_json.get('subset')
 
     start_time = time.time()
-    types = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\featuretypes.csv')
+    featuretypepath = os.path.join(os.getcwd(),'db',dataset,'featuretypes.csv')
+    types = pd.read_csv(featuretypepath)
 
     print("--- %s seconds ---" % (time.time() - start_time))
     start_time = time.time()
-    df = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\features.csv',nrows=rows)
+    featurepath = os.path.join(os.getcwd(),'db',dataset,'features.csv')
+    df = pd.read_csv(featurepath,nrows=rows)
     df_subset = df.iloc[subset,:]
     # df = pd.read_sql_query("select * from "+str(dataset)+"_features",conn) # too slow than read csv
     print("--- %s seconds ---" % (time.time() - start_time))
@@ -193,10 +201,12 @@ def calprojection(dataset,method):
     request_json = request.get_json()
     features = request_json.get('features')
 
-    types = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\featuretypes.csv')
+    featuretypepath = os.path.join(os.getcwd(),'db',dataset,'featuretypes.csv')
+    types = pd.read_csv(featuretypepath)
     classfeature = types.loc[types['type']=='class']['featurename'].iloc[0] # find out which feature is used for classification
 
-    df = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\features.csv',nrows=rows)
+    featurepath = os.path.join(os.getcwd(),'db',dataset,'features.csv')
+    df = pd.read_csv(featurepath,nrows=rows)
 
     if features=='all':
         features = types.loc[(types['type']!='class') & (types['type']!='key')]['featurename'].tolist()
@@ -219,11 +229,14 @@ def calprojection(dataset,method):
 
 @app.route("/api/<dataset>/shapproj/<modelname>")
 def get_shapproj(dataset,modelname):
-    types = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\featuretypes.csv')
+    featuretypepath = os.path.join(os.getcwd(),'db',dataset,'featuretypes.csv')
+    types = pd.read_csv(featuretypepath)
     classfeature = types.loc[types['type']=='class']['featurename'].iloc[0] # find out which feature is used for classification
 
-    classdf = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\features.csv',nrows=rows)[classfeature]
-    with open(os.getcwd()+'\\db\\'+dataset+'\\models.json') as f:
+    featurepath = os.path.join(os.getcwd(),'db',dataset,'features.csv')
+    classdf = pd.read_csv(featurepath,nrows=rows)[classfeature]
+    modelpath = os.path.join(os.getcwd(),'db',dataset,'models.json')
+    with open(modelpath) as f:
         models = json.load(f)
         if modelname=='all':
             shapdatalist=[]
@@ -264,7 +277,8 @@ def get_shapproj(dataset,modelname):
 
 @app.route("/api/<dataset>/predictions")
 def get_predictions(dataset):
-    df = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\predictions.csv',nrows=rows)
+    predictionpath = os.path.join(os.getcwd(),'db',dataset,'predictions.csv')
+    df = pd.read_csv(predictionpath,nrows=rows)
     result={}
     for column in df:
         result[column]=df[column].tolist()
@@ -272,12 +286,14 @@ def get_predictions(dataset):
     return jsonify(result)
 
 def calmodelsinfos(dataset,modelnames):
-    df = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\predictions.csv',usecols=modelnames+['key','label'])
+    predictionpath = os.path.join(os.getcwd(),'db',dataset,'predictions.csv')
+    df = pd.read_csv(predictionpath,usecols=modelnames+['key','label'])
     predictions=[]
     predictions.append({'name':'label','value':df['label'].tolist()})
     statistics = []
 
-    with open(os.getcwd()+'\\db\\'+dataset+'\\models.json') as f:
+    modelpath = os.path.join(os.getcwd(),'db',dataset,'models.json')
+    with open(modelpath) as f:
         models = json.load(f)
 
         featureuse = []
@@ -362,7 +378,8 @@ def calselectedmodelinfos(dataset):
 
 @app.route("/api/<dataset>/modelinfos")
 def get_modelinfos(dataset):
-    with open(os.getcwd()+'\\db\\'+dataset+'\\models.json') as f:
+    modelpath = os.path.join(os.getcwd(),'db',dataset,'models.json')
+    with open(modelpath) as f:
         models = json.load(f)
         models.sort(key=lambda x: x['accuracy'], reverse=True)
         modelinfos = [{'name':model['model'],'accuracy':model['accuracy'],'precision':model['precision'] if 'precision' in model else '*','f1':model['f1'] if 'f1' in model else '*'} for model in models]
@@ -382,7 +399,8 @@ def get_modelstatistics_subset(dataset):
     subset = request_json.get('subset')
     modelnames = request_json.get('models')
 
-    df = pd.read_csv(os.getcwd()+'\\db\\'+dataset+'\\predictions.csv',usecols=modelnames+['key','label']).iloc[subset]
+    predictionpath = os.path.join(os.getcwd(),'db',dataset,'predictions.csv')
+    df = pd.read_csv(predictionpath,usecols=modelnames+['key','label']).iloc[subset]
     statistics = []
 
     for modelname in modelnames:
@@ -406,7 +424,8 @@ def get_shapvalues_subset(dataset):
     if len(subset)==0:
         return jsonify([])
 
-    with open(os.getcwd()+'\\db\\'+dataset+'\\models.json') as f:
+    modelpath = os.path.join(os.getcwd(),'db',dataset,'models.json')
+    with open(modelpath) as f:
         models = json.load(f)
 
         shapdata=[]
